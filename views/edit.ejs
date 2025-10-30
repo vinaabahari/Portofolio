@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Foto - <%= image.judul %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <%- include('layout/header') %>
+
+  <div class="container py-5 container-custom">
+    <h2 class="text-center mb-4">Edit Projek</h2>
+
+    <form action="/admin/foto/update/<%= image._id %>" 
+          method="POST" enctype="multipart/form-data"
+          class="w-75 mx-auto p-4 shadow-sm bg-white rounded">
+
+      <!-- Judul -->
+      <div class="mb-3">
+        <label class="form-label fw-bold">Judul Foto</label>
+        <input type="text" name="judul" class="form-control" value="<%= image.judul %>" required>
+      </div>
+
+      <!-- Bulan -->
+      <div class="mb-3">
+        <label class="form-label fw-bold">Bulan</label>
+        <select name="bulan" class="form-select" required>
+          <option value="">Pilih Bulan</option>
+          <option value="Juni" <%= image.bulan === 'Juni' ? 'selected' : '' %>>Juni</option>
+          <option value="Juli" <%= image.bulan === 'Juli' ? 'selected' : '' %>>Juli</option>
+          <option value="Agustus" <%= image.bulan === 'Agustus' ? 'selected' : '' %>>Agustus</option>
+          <option value="September" <%= image.bulan === 'September' ? 'selected' : '' %>>September</option>
+          <option value="Oktober" <%= image.bulan === 'Oktober' ? 'selected' : '' %>>Oktober</option>
+        </select>
+      </div>
+
+      <!-- Keterangan -->
+      <div class="mb-3">
+        <label class="form-label fw-bold">Keterangan Kegiatan</label>
+        <textarea name="keterangan" class="form-control" rows="3" 
+                  placeholder="Tuliskan deskripsi singkat kegiatan"><%= image.keterangan || '' %></textarea>
+      </div>
+
+      <!-- Detail -->
+      <div class="mb-3">
+        <label class="form-label fw-bold">Detail Kegiatan (opsional)</label>
+        <textarea name="detail" class="form-control" rows="4" 
+                  placeholder="Tuliskan informasi lengkap kegiatan jika ada"><%= image.detail || '' %></textarea>
+        <small class="text-muted">Isi jika ingin menambahkan detail yang muncul di tombol 'Selengkapnya'.</small>
+      </div>
+
+      <!-- Link -->
+      <div class="mb-3">
+        <label class="form-label fw-bold">Link Terkait (opsional)</label>
+        <input type="url" name="link" class="form-control" placeholder="https://contoh.com"
+               value="<%= image.link || '' %>">
+        <small class="text-muted">Masukkan URL jika foto ini memiliki tautan eksternal.</small>
+      </div>
+
+      <!-- Foto -->
+      <div class="mb-3">
+        <label class="form-label fw-bold">Foto Saat Ini</label><br>
+        <img src="<%= image.foto %>" alt="<%= image.judul %>" class="img-thumbnail mb-2" style="max-width: 200px;">
+        <input type="file" name="foto" class="form-control mt-2" accept="image/*">
+        <small class="text-muted">Kosongkan jika tidak ingin mengganti foto.</small>
+      </div>
+
+      <!-- Tombol -->
+      <div class="text-end">
+        <button type="submit" class="btn btn-adm px-4">Simpan Perubahan</button>
+        <a href="/admin/foto" class="btn btn-secondary px-4">Batal</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
