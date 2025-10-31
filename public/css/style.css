@@ -384,7 +384,28 @@ input.form-control:focus {
 }
 
 
-
+@media (max-width: 480px) {
+  body.logreg {
+    padding: 50px;
+  }
+  .logreg .container {
+    padding: 25px 20px;
+    border-radius: 15px;
+  }
+  .container h1 {
+    font-size: 22px;
+  }
+  input.form-control {
+    height: 40px;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+  .btn-logreg,
+  .btn-primary {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
 
 
 

@@ -113,28 +113,6 @@
       transform: scale(1.15);
     }
 
-    /* === RESPONSIVE === */
-    @media (max-width: 992px) {
-      .card img { height: 200px; }
-    }
-
-    @media (max-width: 768px) {
-      h2 { font-size: 1.7rem; }
-      .card img { height: 180px; }
-    }
-
-    @media (max-width: 576px) {
-      a[href*="projects"] {
-        font-size: 26px !important;
-        top: 80px !important;
-        left: 10px !important;
-      }
-
-      h2 { font-size: 1.5rem; }
-      .card img { height: 160px; }
-      .card-body h6 { font-size: 0.9rem; }
-      .card-body p { font-size: 0.8rem; }
-    }
   </style>
 </head>
 
@@ -149,7 +127,7 @@
   <div class="container py-5 container-custom">
     <h2 class="text-center mb-4">Kegiatan Bulan <%= month %></h2>
 
-    <div class="row g-4 mt-5">
+    <div class="row g-4 mt-2">
       <% if (images.length === 0) { %>
         <p class="text-center text-muted">Belum ada foto di bulan ini.</p>
       <% } %>
