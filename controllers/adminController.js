@@ -13,12 +13,30 @@ const adminController = {
     }
   },
 
-  addPhoto: async (req, res) => {
-    try {
-      const { judul, bulan, keterangan, link, detail } = req.body; // ✅ tambahkan detail
-      const foto = `/img/${req.file.filename}`;
 
-      await Photo.create({ judul, bulan, keterangan, link, detail, foto }); // ✅ simpan detail
+addPhoto: async (req, res) => {
+    try {
+      const { judul, bulan, keterangan, link, detail } = req.body;
+
+      if (!req.file) return res.status(400).send("Foto wajib diupload");
+
+      // Upload ke Cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "portofolio", // folder di Cloudinary
+      });
+
+      // Hapus file sementara
+      fs.unlinkSync(req.file.path);
+
+      // Simpan ke MongoDB
+      await Photo.create({
+        judul,
+        bulan,
+        keterangan,
+        link,
+        detail,
+        foto: result.secure_url,
+      });
 
       console.log("✅ Foto berhasil ditambahkan:", judul);
       res.redirect("/admin/foto");
@@ -40,31 +58,35 @@ const adminController = {
     }
   },
 
+
   updatePhoto: async (req, res) => {
     try {
-      const { judul, bulan, keterangan, link, detail } = req.body; // ✅ tambahkan detail
+      const { judul, bulan, keterangan, link, detail } = req.body;
       const id = req.params.id;
 
       const photo = await Photo.findById(id);
-      if (!photo) return res.status(404).send("Foto tidak ditemukan.");
+      if (!photo) return res.status(404).send("Foto tidak ditemukan");
 
-      let fotoPath = photo.foto;
+      let fotoURL = photo.foto;
 
       if (req.file) {
-        const oldPath = path.join(__dirname, "..", "public", photo.foto);
-        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
-        fotoPath = `/img/${req.file.filename}`;
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: "portofolio",
+        });
+        fs.unlinkSync(req.file.path);
+        fotoURL = result.secure_url;
       }
 
-      await Photo.findByIdAndUpdate(id, { judul, bulan, keterangan, link, detail, foto: fotoPath }); // ✅ update detail juga
+      await Photo.findByIdAndUpdate(id, { judul, bulan, keterangan, link, detail, foto: fotoURL });
 
       console.log("✅ Foto berhasil diperbarui:", judul);
       res.redirect("/admin/foto");
     } catch (error) {
       console.error("❌ Gagal memperbarui foto:", error);
-      res.status(500).send("Gagal memperbarui foto.");
+      res.status(500).send("Gagal memperbarui foto");
     }
   },
+
 
   deletePhoto: async (req, res) => {
     try {
